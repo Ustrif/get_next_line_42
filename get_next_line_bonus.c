@@ -1,4 +1,4 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*line_control(char **line)
 {
@@ -83,12 +83,12 @@ char	*line_process(char **buf, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[1024];
 	char		*result;
 
 	if (BUFFER_SIZE < 1 || fd < 0)
 		return (NULL);
-	result = line_process(&buffer, fd);
+	result = line_process(&buffer[fd], fd);
 	if (result == NULL)
 		return (NULL);
 	return (result);
