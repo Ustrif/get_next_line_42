@@ -1,4 +1,16 @@
-#include "get_next_line.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: raydogmu <raydogmu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/14 13:12:53 by raydogmu          #+#    #+#             */
+/*   Updated: 2024/12/14 13:36:11 by raydogmu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "get_next_line_bonus.h"
 
 char	*ft_strndup(const char *src, int start, int len)
 {
@@ -70,4 +82,13 @@ char	*ft_strchr(const char *s, int c)
 	if ((unsigned char) c == '\0')
 		return ((char *)s);
 	return (NULL);
+}
+
+void	free_if_empty(char **line)
+{
+	if (line != NULL && *line != NULL && **line == '\0')
+	{
+		free(*line);
+		*line = NULL;
+	}
 }
