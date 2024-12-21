@@ -1,10 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: raydogmu <raydogmu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/14 13:13:00 by raydogmu          #+#    #+#             */
+/*   Updated: 2024/12/14 13:34:32 by raydogmu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
+
+char	*extract_line(char **line, int newline_index)
+{
+	char	*result;
+	char	*temp;
+
+	result = ft_strndup(*line, 0, newline_index + 1);
+	if (result == NULL)
+		return (NULL);
+	temp = ft_strndup(*line, newline_index + 1,
+			ft_strlen(*line) - newline_index - 1);
+	if (temp == NULL)
+	{
+		free(result);
+		return (NULL);
+	}
+	free(*line);
+	*line = temp;
+	return (result);
+}
 
 char	*line_control(char **line)
 {
 	int		i;
 	char	*result;
-	char	*temp;
 
 	if (*line == NULL)
 		return (NULL);
@@ -13,17 +44,10 @@ char	*line_control(char **line)
 	{
 		if ((*line)[i] == '\n')
 		{
-			result = ft_strndup(*line, 0, i + 1);
+			result = extract_line(line, i);
 			if (result == NULL)
 				return (NULL);
-			temp = ft_strndup(*line, i + 1, ft_strlen(*line) - i - 1);
-			if (temp == NULL)
-			{
-				free(result);
-				return (NULL);
-			}
-			free(*line);
-			*line = temp;
+			free_if_empty(line);
 			return (result);
 		}
 		i++;
@@ -58,7 +82,7 @@ int	reader(char **buf, int fd)
 char	*line_process(char **buf, int fd)
 {
 	char	*data;
-	int 	readed;
+	int		readed;
 
 	if (*buf != NULL)
 	{
@@ -68,7 +92,7 @@ char	*line_process(char **buf, int fd)
 	}
 	readed = reader(buf, fd);
 	if (*buf == NULL)
-		return(NULL);
+		return (NULL);
 	data = line_control(buf);
 	if (data == NULL && readed == 0 && *buf != NULL)
 	{
